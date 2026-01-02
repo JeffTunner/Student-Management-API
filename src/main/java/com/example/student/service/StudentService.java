@@ -3,6 +3,7 @@ package com.example.student.service;
 import com.example.student.dto.StudentRequestDto;
 import com.example.student.dto.StudentResponseDto;
 import com.example.student.entity.Student;
+import com.example.student.exception.StudentNotFoundException;
 import com.example.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,7 @@ public class StudentService {
     }
 
     public StudentResponseDto getById(Long id) {
-        Student found = studentRepository.findById(id).orElse(null);
+        Student found = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student with ID: "+id+" not found!"));
         return toResponseDto(found);
     }
 
@@ -47,7 +48,7 @@ public class StudentService {
     }
 
     public void deleteStudent(Long id) {
-        Student found = studentRepository.findById(id).orElse(null);
+        Student found = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student with ID: "+id+" not found!"));
         studentRepository.delete(found);
     }
 }

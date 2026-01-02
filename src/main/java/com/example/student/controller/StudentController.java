@@ -7,6 +7,7 @@ import com.example.student.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,23 +18,27 @@ public class StudentController {
     StudentService service;
 
     @PostMapping("/add")
-    public StudentResponseDto create(@RequestBody @Valid StudentRequestDto studentRequestDto) {
-        return service.createStudent(studentRequestDto);
+    public ResponseEntity<StudentResponseDto> create(@RequestBody @Valid StudentRequestDto studentRequestDto) {
+        StudentResponseDto dto = service.createStudent(studentRequestDto);
+        return ResponseEntity.status(201).body(dto);
     }
 
     @GetMapping("/find")
-    public StudentResponseDto find(@RequestParam @Valid Long id){
-        return service.getById(id);
+    public ResponseEntity<StudentResponseDto> find(@RequestParam @Valid Long id){
+        StudentResponseDto dto = service.getById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/all")
-    public Page<StudentResponseDto> findAll(@RequestParam int page, int size) {
-        return service.getStudentsPaginated(page, size);
+    public ResponseEntity<Page<StudentResponseDto>> findAll(@RequestParam int page, int size) {
+        Page<StudentResponseDto> page1 = service.getStudentsPaginated(page, size);
+        return ResponseEntity.ok(page1);
     }
 
     @GetMapping("/delete")
-    public void delete(@RequestParam @Valid Long id) {
+    public ResponseEntity<Void> delete(@RequestParam @Valid Long id) {
         service.deleteStudent(id);
+        return ResponseEntity.noContent().build();
     }
 
 
