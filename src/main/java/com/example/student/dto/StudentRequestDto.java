@@ -1,5 +1,6 @@
 package com.example.student.dto;
 
+import com.example.student.entity.Address;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -18,4 +19,6 @@ public class StudentRequestDto {
 
     @Min(value = 1, message = "Age must be greater than 0")
     private int age;
+
+    private Address address;
 }
