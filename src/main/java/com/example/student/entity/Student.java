@@ -20,7 +20,7 @@ public class Student {
     private String name;
     private int age;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 }
