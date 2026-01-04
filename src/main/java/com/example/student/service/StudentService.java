@@ -22,12 +22,13 @@ public class StudentService {
         Student student = new Student();
         student.setName(studentRequestDto.getName());
         student.setAge(studentRequestDto.getAge());
+        student.setAddress(studentRequestDto.getAddress());
         return student;
     }
 
     // Entity -> DTO
     private StudentResponseDto toResponseDto(Student student) {
-        return new StudentResponseDto(student.getId(), student.getName(), student.getAge());
+        return new StudentResponseDto(student.getId(), student.getName(), student.getAge(), student.getAddress());
     }
 
     public StudentResponseDto createStudent(StudentRequestDto requestDto) {
