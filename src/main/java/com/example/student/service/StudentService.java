@@ -2,6 +2,7 @@ package com.example.student.service;
 
 import com.example.student.dto.StudentRequestDto;
 import com.example.student.dto.StudentResponseDto;
+import com.example.student.entity.Address;
 import com.example.student.entity.Student;
 import com.example.student.exception.StudentNotFoundException;
 import com.example.student.repository.StudentRepository;
@@ -51,5 +52,16 @@ public class StudentService {
     public void deleteStudent(Long id) {
         Student found = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student with ID: "+id+" not found!"));
         studentRepository.delete(found);
+    }
+
+    public StudentResponseDto updateStudent(Long id, StudentRequestDto requestDto) {
+        Student existing = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student with ID: \"+id+\" not found!"));
+        existing.setName(requestDto.getName());
+        existing.setAge(requestDto.getAge());
+        Address address = existing.getAddress();
+        address.setCity(requestDto.getAddress().getCity());
+        address.setStreet(requestDto.getAddress().getStreet());
+        Student saved = studentRepository.save(existing);
+        return toResponseDto(saved);
     }
 }
