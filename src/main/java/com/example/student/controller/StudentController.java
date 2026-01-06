@@ -35,12 +35,16 @@ public class StudentController {
         return ResponseEntity.ok(page1);
     }
 
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<Void> delete(@RequestParam @Valid Long id) {
         service.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<StudentResponseDto> update(@PathVariable @Valid Long id, @RequestBody StudentRequestDto requestDto) {
+        return ResponseEntity.ok(service.updateStudent(id, requestDto));
+    }
 
 
 }
