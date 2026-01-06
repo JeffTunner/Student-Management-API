@@ -20,7 +20,8 @@ public class Student {
     private String name;
     private int age;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,
+    orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
 }
