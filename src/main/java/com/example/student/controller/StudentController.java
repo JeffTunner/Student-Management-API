@@ -2,12 +2,14 @@ package com.example.student.controller;
 
 import com.example.student.dto.StudentRequestDto;
 import com.example.student.dto.StudentResponseDto;
-import com.example.student.repository.StudentRepository;
+import com.example.student.security.JwtUtil;
 import com.example.student.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +18,9 @@ public class StudentController {
 
     @Autowired
     StudentService service;
+
+    @Autowired
+    JwtUtil jwtUtil;
 
     @PostMapping("/add")
     public ResponseEntity<StudentResponseDto> create(@RequestBody @Valid StudentRequestDto studentRequestDto) {
@@ -46,5 +51,15 @@ public class StudentController {
         return ResponseEntity.ok(service.updateStudent(id, requestDto));
     }
 
+    @GetMapping("/whoami")
+    public String whoAmI() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
+    }
+
+    @GetMapping("/{username}/token")
+    public String token(@PathVariable String username) {
+        return jwtUtil.generateToken(username);
+    }
 
 }
