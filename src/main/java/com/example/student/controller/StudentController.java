@@ -8,8 +8,11 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -52,14 +55,19 @@ public class StudentController {
     }
 
     @GetMapping("/whoami")
-    public String whoAmI() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getName();
+    public String whoAmI(@AuthenticationPrincipal UserDetails user) {
+        return user.getUsername();
     }
 
     @GetMapping("/{username}/token")
-    public String token(@PathVariable String username) {
-        return jwtUtil.generateToken(username);
+    public String token(@PathVariable String username, @RequestParam(defaultValue = "ROLE_USER") String role) {
+        return jwtUtil.generateToken(username, role);
+    }
+
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminOnly() {
+        return "Admin access granted!";
     }
 
 }
