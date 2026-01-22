@@ -13,6 +13,10 @@ public class JwtUtil {
          return extractAllClaims(token).getSubject();
      }
 
+     public String extractRole(String token) {
+         return extractAllClaims(token).get("role", String.class);
+     }
+
      public boolean isTokenValid(String token) {
          try {
              extractAllClaims(token);
@@ -27,10 +31,7 @@ public class JwtUtil {
                  parseClaimsJws(token).getBody();
      }
 
-    public String generateToken(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
-                .compact();
+    public String generateToken(String username, String role) {
+        return Jwts.builder().setSubject(username).claim("role", role).signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes())).compact();
     }
 }
