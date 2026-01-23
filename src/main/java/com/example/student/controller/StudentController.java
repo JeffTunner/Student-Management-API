@@ -55,8 +55,8 @@ public class StudentController {
     }
 
     @GetMapping("/whoami")
-    public String whoAmI(@AuthenticationPrincipal UserDetails user) {
-        return user.getUsername();
+    public String whoAmI(Authentication authentication) {
+        return authentication.getName();
     }
 
     @GetMapping("/{username}/token")
